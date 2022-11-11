@@ -38,7 +38,7 @@
   "unsnapAudioContainerAddress": null,
   "unsnapAudioVolume_dB": 0.0,
   "overrideMassAndDrag": true,
-  "mass": 3.0,
+  "mass": 5.0,
   "drag": 1.0,
   "angularDrag": 0.05,
   "manaRegenMultiplier": 1.0,
