@@ -1,0 +1,58 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Japanese",
+  "saveFolder": "bas",
+  "sensitiveContent": "None",
+  "sensitiveFilterBehaviour": "Discard",
+  "version": 1,
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Options",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "turnAllowed",
+          "text": "コントローラーによる方向転換操作を許可します",
+          "spriteAddress": null,
+          "videoAddress": null
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It With B&S",
+          "spriteAddress": null,
+          "videoAddress": null
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverItDescription",
+          "text": "特定の人を、傷つけるために",
+          "spriteAddress": null,
+          "videoAddress": null
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "turnAllowed",
+          "text": "方向転換許可",
+          "spriteAddress": null,
+          "videoAddress": null
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "登山用ハンマー",
+      "description": "必需品"
+    }
+  ]
+}
