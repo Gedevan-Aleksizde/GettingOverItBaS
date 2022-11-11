@@ -15,13 +15,16 @@ namespace GettingOverIt
     {
         public bool turnAllowed = true;
         public bool highJump = true;
+        public bool fastSwing = true;
         private const float gravityMult = 0.7f;
         private const float massMult = 0.1f;
-        private bool playerCrouchOnJump;
+        private readonly Vector2 springDamper = new Vector2(5000f, 1f);
+        private readonly Vector2 springDamper2HMult = new Vector2(2f, 1f);
         public override IEnumerator OnLoadCoroutine()
         {
             this.turnAllowed = this.level.ParseLevelOption("turnAllowed", true);
             this.highJump = this.level.ParseLevelOption("highJumpt", true);
+            this.fastSwing = this.level.ParseLevelOption("fastSwing", true);
             Debug.Log("[GettingOverIt] Getting Over It mode activated");
             EventManager.OnPlayerSpawned += this.ModifyPlayer_onSpawn;
             EventManager.onCreatureSpawn += this.EventManager_onCreatureSpawn;
@@ -50,12 +53,20 @@ namespace GettingOverIt
         {
             if(creature.isPlayer)
             {
-                creature.equipment.UnequipAllWardrobes(true);
+                // TODO: keep crouching
                 creature.currentLocomotion.SetPhysicModifier(
                     this,
                     gravityMultiplier: this.highJump ? (float?)gravityMult : null,
                     massMultiplier: this.highJump ? massMult: -1);
-                // TODO: keep crouching
+                if(this.fastSwing)
+                {
+                    creature.data.forceMaxPosition = 10000f;
+                    creature.data.forceMaxRotation = 10000f;
+                    creature.data.forcePositionSpringDamper = this.springDamper;
+                    creature.data.forceRotationSpringDamper = this.springDamper;
+                    creature.data.forceRotationSpringDamper2HMult = this.springDamper2HMult;
+                }
+                creature.equipment.UnequipAllWardrobes(true);
                 Catalog.InstantiateAsync(
                     "GettingOverIt.Pot",
                     creature.ragdoll.rootPart.transform.position,

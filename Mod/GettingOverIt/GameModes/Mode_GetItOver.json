@@ -23,7 +23,7 @@
 				"$type": "ThunderRoad.LevelData+Option, ThunderRoad",
 				"name": "turnAllowed",
 				"displayName": "Turn Allowed",
-				"description": "You're allowed to turn or not",
+				"description": "You're allowed to turn by the controller",
 				"type": "toggle",
 				"minValue": 0,
 				"maxValue": 1,
@@ -37,7 +37,17 @@
 				"type": "toggle",
 				"minValue": 0,
 				"maxValue": 1,
-				"defaultValue":  1
+				"defaultValue": 1
+			},
+			{
+				"$type": "ThunderRoad.LevelData+Option, ThunderRoad",
+				"name": "fastSwing",
+				"displayName": "Fast Swing",
+				"description": "You can swing the hammer faster",
+				"type": "toggle",
+				"minValue": 0,
+				"maxValue": 1,
+				"defaultValue": 1
 			}
 		]
 	}
