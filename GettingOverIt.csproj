@@ -10,9 +10,10 @@
     <RootNamespace>GettingOverIt</RootNamespace>
     <AssemblyName>GettingOverIt</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>9.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <ModFolder>D:\User\Saved Game\BaS-save\mods\</ModFolder>
+    <ModFolder>C:\Users\ks\AppData\Local\ModOrganizer\Blade &amp; Sorcery\mods\</ModFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
