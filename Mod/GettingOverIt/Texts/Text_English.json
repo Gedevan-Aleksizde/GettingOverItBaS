@@ -1,6 +1,6 @@
 {
   "$type": "ThunderRoad.TextData, ThunderRoad",
-  "id": "Japanese",
+  "id": "English",
   "saveFolder": "bas",
   "sensitiveContent": "None",
   "sensitiveFilterBehaviour": "Discard",
@@ -13,7 +13,7 @@
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "category_general",
-            "text": "全般"
+            "text": "General"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
@@ -23,37 +23,37 @@
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "getting_over_it_desc",
-            "text": "このmodの機能を有効にします. **マップの再ロード後に反映されます.**"
+            "text": "Enable this mod's feature. **Reloading the level needed.**"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "enable_turn",
-            "text": "方向転換を許可"
+            "text": "Enable Turning"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
-            "id": "enable_turn_desc",
-            "text": "スティックによる方向転換操作を許可します。"
+            "id": "thumbstick_moving_desc",
+            "text": "Enable thumbstick turning"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "high_jump",
-            "text": "ハイジャンプ"
+            "text": "High Jump"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "high_jump_desc",
-            "text": "通常よりジャンプ力を強化します。"
+            "text": "Enhance Player's Jumping skill"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "fast_swing",
-            "text": "高速スウィング"
+            "text": "Fast Swing"
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "fast_swing_desc",
-            "text": "元のゲームのように、武器を見た目より軽く動かせるようにします。**やや動作が不安定になる可能性があります。**"
+            "text": "Enable to swing the weapon faster than what they look, like the original game. **The physics simulation gets unstable a bit if enabled**"
           }
         ]
       }

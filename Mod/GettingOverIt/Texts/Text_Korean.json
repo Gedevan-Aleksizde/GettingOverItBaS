@@ -1,0 +1,69 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Korean",
+  "saveFolder": "bas",
+  "sensitiveContent": "None",
+  "sensitiveFilterBehaviour": "Discard",
+  "version": 1,
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "ModOpts",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "category_general",
+          "text": "General"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "getting_over_it",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "getting_over_it_desc",
+          "text": "Enable this mod's feature. **Reloading the level needed.**"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "enable_turn",
+          "text": "Enable Turning"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "thumbstick_moving_desc",
+          "text": "Enable thumbstick turning"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "high_jump",
+          "text": "High Jump"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "high_jump_desc",
+          "text": "Enhance Player's Jumping skill"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "fast_swing",
+          "text": "Fast Swing"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "fast_swing_desc",
+          "text": "Enable to swing the weapon faster than what they look, like the original game. **The physics simulation gets unstable a bit if enabled**"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "登山用ハンマー",
+      "description": "必需品"
+    }
+  ]
+}
