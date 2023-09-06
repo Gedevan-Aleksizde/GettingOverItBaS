@@ -27,6 +27,11 @@
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+            "id": "enable_in_home",
+            "text": "自宅でも有効"
+          },
+          {
+            "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "enable_turn",
             "text": "方向転換を許可"
           },

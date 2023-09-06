@@ -27,6 +27,11 @@
           },
           {
             "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+            "id": "enable_in_home",
+            "text": "Home"
+          },
+          {
+            "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
             "id": "enable_turn",
             "text": "Enable Turning"
           },

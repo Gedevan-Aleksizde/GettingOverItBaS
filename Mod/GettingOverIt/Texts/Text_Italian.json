@@ -22,6 +22,11 @@
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "enable_in_home",
+          "text": "Home"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "getting_over_it_desc",
           "text": "Enable this mod's feature. **Reloading the level needed.**"
         },
