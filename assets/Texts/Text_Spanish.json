@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Spanish",
+  "version": 1,
+  "languageCode": "es",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Olla de escalada",
+      "description": "Impide el movimiento con la palanca mientras se lleva puesta."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Martillo de escalada",
+      "description": "Martillo a dos manos para escalar mediante la reacción física."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Thai",
+  "version": 1,
+  "languageCode": "th",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "ไหปีนป่าย",
+      "description": "ปิดการเคลื่อนที่ด้วยสติ๊กขณะสวมใส่"
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "ค้อนปีนป่าย",
+      "description": "ค้อนสองมือสำหรับปีนป่ายด้วยแรงปฏิกิริยา"
+    }
+  ]
+}

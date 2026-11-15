@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "English",
+  "version": 1,
+  "languageCode": "en",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Climbing Pot",
+      "description": "Prevents stick movement while worn."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Climbing Hammer",
+      "description": "A two-handed hammer for climbing by physical reaction."
+    }
+  ]
+}

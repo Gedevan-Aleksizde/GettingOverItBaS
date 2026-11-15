@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Korean",
+  "version": 1,
+  "languageCode": "ko",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "등반용 항아리",
+      "description": "착용 중 스틱 이동을 금지합니다."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "등반용 망치",
+      "description": "반작용으로 몸을 들어 올리는 양손 망치입니다."
+    }
+  ]
+}

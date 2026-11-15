@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Portuguese",
+  "version": 1,
+  "languageCode": "pt",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Pote de escalada",
+      "description": "Impede o movimento pelo analógico enquanto equipado."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Martelo de escalada",
+      "description": "Martelo de duas mãos para escalar usando a reação física."
+    }
+  ]
+}

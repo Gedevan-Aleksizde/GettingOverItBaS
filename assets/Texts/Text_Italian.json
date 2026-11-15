@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Italian",
+  "version": 1,
+  "languageCode": "it",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Vaso da arrampicata",
+      "description": "Impedisce il movimento con la levetta quando indossato."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Martello da arrampicata",
+      "description": "Martello a due mani per arrampicarsi sfruttando la reazione fisica."
+    }
+  ]
+}

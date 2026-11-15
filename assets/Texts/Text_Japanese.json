@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "Japanese",
+  "version": 1,
+  "languageCode": "ja",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "登攀用壺",
+      "description": "装備中はスティック移動を禁止します。"
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "登攀用ハンマー",
+      "description": "登山用の両手持ちハンマーです。"
+    }
+  ]
+}

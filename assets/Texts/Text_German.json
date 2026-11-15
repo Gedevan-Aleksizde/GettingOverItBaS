@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "German",
+  "version": 1,
+  "languageCode": "de",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Klettertopf",
+      "description": "Verhindert beim Tragen die Bewegung per Stick."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Kletterhammer",
+      "description": "Zweihändiger Hammer zum Klettern durch physikalische Gegenkräfte."
+    }
+  ]
+}

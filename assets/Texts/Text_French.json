@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "French",
+  "version": 1,
+  "languageCode": "fr",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "Pot d’escalade",
+      "description": "Empêche le déplacement au joystick lorsqu’il est porté."
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "Marteau d’escalade",
+      "description": "Marteau à deux mains pour grimper grâce aux réactions physiques."
+    }
+  ]
+}

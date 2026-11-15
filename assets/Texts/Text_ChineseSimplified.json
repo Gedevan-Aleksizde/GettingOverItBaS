@@ -1,0 +1,20 @@
+{
+  "$type": "ThunderRoad.TextData, ThunderRoad",
+  "id": "ChineseSimplified",
+  "version": 1,
+  "languageCode": "zh-CN",
+  "items": [
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOIPot",
+      "name": "攀爬罐",
+      "description": "穿戴时禁止摇杆移动。"
+    },
+    {
+      "$type": "ThunderRoad.TextData+Item, ThunderRoad",
+      "id": "GOILongHammer",
+      "name": "攀爬锤",
+      "description": "利用反作用力攀爬的双手锤。"
+    }
+  ]
+}
