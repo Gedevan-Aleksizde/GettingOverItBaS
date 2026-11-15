@@ -67,7 +67,7 @@ namespace GettingOverIt
     {
         private Creature creature;
         private GameObject visual;
-        private bool oldMove, restored;
+        private bool oldMove, oldJump, restored;
         public void Initialize(Creature target)
         {
             if (visual != null) Restore();
@@ -78,13 +78,18 @@ namespace GettingOverIt
             if (creature.isPlayer && Player.local != null)
             {
                 oldMove = Player.local.locomotion.allowMove;
+                oldJump = Player.local.locomotion.allowJump;
                 Player.TogglePlayerMovement(false);
+                Player.TogglePlayerJump(false);
             }
         }
         private void LateUpdate()
         {
             if (!restored && creature != null && creature.isPlayer && Player.currentCreature == creature)
+            {
                 Player.TogglePlayerMovement(false);
+                Player.TogglePlayerJump(false);
+            }
         }
         public void Restore()
         {
@@ -92,7 +97,10 @@ namespace GettingOverIt
             restored = true;
             if (visual != null) Object.Destroy(visual);
             if (creature != null && creature.isPlayer && Player.currentCreature == creature && Player.local != null)
+            {
                 Player.TogglePlayerMovement(oldMove);
+                Player.TogglePlayerJump(oldJump);
+            }
         }
         private void OnDestroy() { Restore(); }
     }
