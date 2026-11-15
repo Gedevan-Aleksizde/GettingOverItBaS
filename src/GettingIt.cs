@@ -12,6 +12,7 @@ namespace GettingOverIt
     {
         public const string ModeName = "GettingOverIt";
         private readonly HashSet<LevelData> registered = new HashSet<LevelData>();
+        private readonly HashSet<LevelData> failedRegistration = new HashSet<LevelData>();
         private Session session;
         private bool leaving;
 
@@ -25,6 +26,7 @@ namespace GettingOverIt
         {
             EventManager.onLevelUnload += OnLevelUnload;
             EventManager.onCreatureDespawn += OnCreatureDespawn;
+            Debug.Log("[GettingOverIt] Script enabled (1.0.2)");
         }
 
         public override void ScriptUpdate()
@@ -32,8 +34,21 @@ namespace GettingOverIt
             // Catalogs are refreshed after scripts are enabled. Register when data becomes available.
             foreach (LevelData level in Catalog.GetDataList<LevelData>())
             {
-                if (!Eligible(level.id) || level.modes == null || registered.Contains(level)) continue;
-                if (TryAddMode(level)) registered.Add(level);
+                if (!Eligible(level.id) || level.modes == null || registered.Contains(level) || failedRegistration.Contains(level)) continue;
+                try
+                {
+                    if (TryAddMode(level))
+                    {
+                        registered.Add(level);
+                        Debug.Log("[GettingOverIt] Registered level mode: " + level.id);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // One incompatible custom map must not block player setup or flood every frame's log.
+                    failedRegistration.Add(level);
+                    Debug.LogError("[GettingOverIt] Cannot register level mode for " + level.id + ": " + ex);
+                }
             }
 
             var current = Level.current;
@@ -45,7 +60,12 @@ namespace GettingOverIt
                 && Player.local != null && creature.container.contentLoaded && creature.equipment != null
                 && creature.mana?.casterLeft != null && creature.mana.casterRight != null)
             {
-                try { session = new Session(creature); session.Enter(); }
+                try
+                {
+                    session = new Session(creature);
+                    session.Enter();
+                    Debug.Log("[GettingOverIt] Entered level mode: " + current.data.id);
+                }
                 catch (Exception ex) { Debug.LogError("[GettingOverIt] Setup failed: " + ex); EndSession(); leaving = true; unloadingLevel = current; }
             }
             session?.Update();
@@ -69,7 +89,9 @@ namespace GettingOverIt
             if (level.modes.Any(m => m.name == ModeName)) return false;
             var original = level.modes.FirstOrDefault(m => m.name == "Sandbox" && m.allowGameModes != null && m.allowGameModes.Contains("Sandbox"));
             if (original == null) return false;
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto };
+            // Catalog settings include Unity converters (vectors, quaternions, colors, etc.).
+            // Plain JSON.NET settings walk Vector3.normalized recursively and abort the update loop.
+            var settings = Catalog.GetJsonNetSerializerSettings();
             var mode = JsonConvert.DeserializeObject<LevelData.Mode>(JsonConvert.SerializeObject(original, settings), settings);
             mode.name = ModeName;
             mode.displayName = "Getting Over It";
@@ -105,6 +127,7 @@ namespace GettingOverIt
             EndSession();
             foreach (var level in registered) level.modes.RemoveAll(m => m.name == ModeName);
             registered.Clear();
+            failedRegistration.Clear();
         }
 
         private sealed class Session : IDisposable
@@ -118,6 +141,7 @@ namespace GettingOverIt
             private bool oldMove, oldTurn, oldJump, oldCrouch;
             private SavedSpells spells;
             private bool savedSpells;
+            private MaleBareTorso bareTorso;
             private readonly List<SpellPowerSlowTime> powers = new List<SpellPowerSlowTime>();
             private readonly List<(Item item, Holder holder, RagdollHand hand)> stored = new List<(Item, Holder, RagdollHand)>();
 
@@ -136,7 +160,12 @@ namespace GettingOverIt
                 var potData = Catalog.GetData<ItemData>("GOIPot", true);
                 if (hammerData == null || potData == null) throw new InvalidOperationException("Required items missing");
                 worn = Creature.equipment.GetWornContents().Where(c => c.data.GetModule<ItemModuleWardrobe>()?.category != Equipment.WardRobeCategory.Body).ToArray();
+                if (Creature.data.name == "HumanMale")
+                {
+                    bareTorso = new MaleBareTorso(Creature.manikinLocations);
+                }
                 foreach (var content in worn) Creature.equipment.UnequipWardrobe(content);
+                bareTorso?.Apply(Creature.data.name);
                 foreach (var holder in Creature.container.linkedHolders)
                     foreach (var item in holder.items.ToArray()) Store(item, holder, null);
                 Store(Creature.handLeft.grabbedHandle?.item, null, Creature.handLeft);
@@ -195,6 +224,7 @@ namespace GettingOverIt
             public void Update()
             {
                 if (Creature == null) return;
+                bareTorso?.Apply(Creature.data.name);
                 if (pot != null && !pot.HasState<ContentStateWorn>())
                 {
                     if (!Creature.container.contents.Contains(pot)) Creature.container.AddItemContent(pot);
@@ -216,6 +246,7 @@ namespace GettingOverIt
                     Creature.handRight.OnUnGrabEvent -= OnRelease;
                     if (hammer != null) hammer.Despawn();
                     if (pot != null) { Creature.equipment.UnequipWardrobe(pot); Creature.container.RemoveContent(pot); }
+                    bareTorso?.Dispose();
                     if (worn != null) foreach (var content in worn) Creature.equipment.EquipWardrobe(content);
                     foreach (var entry in stored)
                     {
@@ -245,7 +276,14 @@ namespace GettingOverIt
                     Player.TogglePlayerTurn(oldTurn);
                 }
                 Player.crouchOnJump = oldCrouch;
+                bareTorso?.Dispose();
             }
+        }
+
+        public override void ScriptUnload()
+        {
+            EndSession();
+            PotMesh.ReleaseMaterial();
         }
     }
 }

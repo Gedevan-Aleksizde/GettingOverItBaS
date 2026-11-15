@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <LangVersion>9.0</LangVersion>
+    <GameManaged>C:/Program Files (x86)/Steam/steamapps/common/Blade &amp; Sorcery/BladeAndSorcery_Data/Managed</GameManaged>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="../bin/Release/net472/GettingOverIt.dll" Private="false" />
+    <Reference Include="$(GameManaged)/ThunderRoad.dll" Private="false" />
+    <Reference Include="$(GameManaged)/ThunderRoad.Manikin.dll" Private="false" />
+    <Reference Include="$(GameManaged)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(GameManaged)/Unity.ResourceManager.dll" Private="false" />
+  </ItemGroup>
+</Project>

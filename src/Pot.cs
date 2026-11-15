@@ -11,6 +11,7 @@ namespace GettingOverIt
     {
         public override IEnumerator LoadAddressableAssetsCoroutine(ItemData data)
         {
+            yield return PotMesh.LoadMaterial();
             if (wardrobes.TrueForAll(w => w.manikinWardrobeData != null)) yield break;
             yield return base.LoadAddressableAssetsCoroutine(data);
             foreach (var wardrobe in wardrobes)
@@ -98,6 +99,35 @@ namespace GettingOverIt
 
     public static class PotMesh
     {
+        private static GameObject materialPrefab;
+        private static Material materialSource;
+
+        public static IEnumerator LoadMaterial()
+        {
+            if (materialSource != null) yield break;
+            var data = Catalog.GetData<ItemData>("MetalPottery_01", true);
+            if (data == null) throw new System.InvalidOperationException("MetalPottery_01 material source missing");
+            yield return Catalog.LoadAssetCoroutine<GameObject>(data.prefabAddress, prefab =>
+            {
+                materialPrefab = prefab;
+                if (prefab == null) return;
+                foreach (var renderer in prefab.GetComponentsInChildren<Renderer>(true))
+                    foreach (var material in renderer.sharedMaterials)
+                        if (material != null && material.shader != null && material.shader.isSupported)
+                        {
+                            materialSource = material;
+                            return;
+                        }
+            }, "GettingOverIt pot material");
+            if (materialSource == null) throw new System.InvalidOperationException("No supported material on MetalPottery_01");
+        }
+
+        public static void ReleaseMaterial()
+        {
+            materialSource = null;
+            if (materialPrefab != null) Catalog.ReleaseAsset(materialPrefab);
+            materialPrefab = null;
+        }
         // Lathed cross-section closes the bottom and rim, with an open, hollow interior.
         public static readonly Vector2[] Profile = {
             new Vector2(0, 0.04f), new Vector2(0.27f, 0.04f),
@@ -116,12 +146,14 @@ namespace GettingOverIt
             var vertices = new List<Vector3>();
             var triangles = new List<int>();
             var weights = new List<BoneWeight>();
+            var uv = new List<Vector2>();
             for (int ring = 0; ring < Profile.Length; ring++)
                 for (int i = 0; i <= segments; i++)
                 {
                     float angle = i * Mathf.PI * 2 / segments;
                     vertices.Add(new Vector3(Mathf.Cos(angle) * Profile[ring].x, Profile[ring].y, Mathf.Sin(angle) * Profile[ring].x) * scale);
                     weights.Add(new BoneWeight { boneIndex0 = 0, weight0 = 1 });
+                    uv.Add(new Vector2((float)i / segments, (float)ring / (Profile.Length - 1)));
                     if (ring == 0 || i == segments) continue;
                     int a = (ring - 1) * (segments + 1) + i, b = ring * (segments + 1) + i;
                     triangles.Add(a); triangles.Add(b); triangles.Add(a + 1);
@@ -129,15 +161,17 @@ namespace GettingOverIt
                 }
             var mesh = new Mesh { name = "GettingOverIt_PotMesh" };
             mesh.SetVertices(vertices); mesh.SetTriangles(triangles, 0);
+            mesh.SetUVs(0, uv);
             mesh.boneWeights = weights.ToArray();
             mesh.bindposes = new[] { bone.worldToLocalMatrix * go.transform.localToWorldMatrix };
             mesh.RecalculateNormals(); mesh.RecalculateBounds();
+            mesh.RecalculateTangents();
             renderer.sharedMesh = mesh;
             renderer.bones = new[] { bone }; renderer.rootBone = bone;
             renderer.updateWhenOffscreen = true;
-            var shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Standard");
-            var material = new Material(shader) { color = new Color(0.12f, 0.10f, 0.08f) };
-            material.SetFloat("_Metallic", 0.65f); material.SetFloat("_Smoothness", 0.25f);
+            if (materialSource == null) throw new System.InvalidOperationException("Pot material not loaded");
+            var material = new Material(materialSource) { name = "GettingOverIt_PotMaterial" };
+            if (material.HasProperty("_Bitmask")) material.SetFloat("_Bitmask", 0);
             renderer.sharedMaterial = material;
             var resources = go.AddComponent<PotResources>(); resources.Mesh = mesh; resources.Material = material;
             return go;
