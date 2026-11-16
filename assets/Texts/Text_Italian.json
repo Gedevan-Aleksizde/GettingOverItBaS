@@ -16,5 +16,34 @@
       "name": "Martello da arrampicata",
       "description": "Martello a due mani per arrampicarsi sfruttando la reazione fisica."
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "Avanzate"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "Caccia ai cristalli"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>ATTENZIONE!</color></b>\nAttivare questa opzione può impedire la progressione o causare la perdita degli oggetti trasportati. Applica le regole di Getting Over It nei dungeon di Caccia ai cristalli dal prossimo cambio di livello. Disattivato per impostazione predefinita."
+        }
+      ]
+    }
   ]
 }

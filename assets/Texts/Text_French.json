@@ -16,5 +16,34 @@
       "name": "Marteau d’escalade",
       "description": "Marteau à deux mains pour grimper grâce aux réactions physiques."
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "Avancé"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "Chasse aux cristaux"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>ATTENTION !</color></b>\nActiver cette option peut bloquer la progression ou entraîner la perte des objets transportés. Applique les règles de Getting Over It dans les donjons de Chasse aux cristaux au prochain changement de niveau. Désactivé par défaut."
+        }
+      ]
+    }
   ]
 }

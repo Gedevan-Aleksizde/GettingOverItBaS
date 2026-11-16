@@ -36,6 +36,7 @@ class Program
         Check(GettingIt.Eligible("Arena"), "Arena allowed");
         Check(GettingIt.Eligible("CustomModMap"), "Custom map allowed");
         TestOutfitLayout();
+        TestLevelActivation();
         var original = new LevelData.Mode { name = "Sandbox", allowGameModes = new List<string> { "Sandbox", "CrystalHunt" } };
         original.modules.Add(new LevelModuleCleaner { cleanerRate = 7 });
         original.modules.Add(new SpatialTestModule
@@ -91,6 +92,34 @@ class Program
         Check(again.Count == target.Count, "Repeated reconciliation is stable");
         var female = ModeOutfit.BuildLayout(basis, body, pot);
         Check(female.ContainsKey(new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 3)), "Female filtering does not strip underwear");
+    }
+
+    static void TestLevelActivation()
+    {
+        var policy = new LevelActivation();
+        Check(!ModOptions.EnableCrystalHunt, "Crystal Hunt option defaults to disabled");
+        var option = (ModOption)typeof(ModOptions).GetField(nameof(ModOptions.EnableCrystalHunt)).GetCustomAttributes(typeof(ModOption), false)[0];
+        Check(option.defaultValueIndex == 0 && !ModOptionBool.defaultValues[0].boolValue, "UI default is disabled");
+        Check(option.nameLocalizationId == "GettingOverItOpt.CrystalHunt" && option.tooltipLocalizationId == "GettingOverItOpt.CrystalHunt_desc", "Option uses owned localization IDs");
+        Check(!policy.ShouldApply("CrystalHunt", "DungeonOutpost", "CrystalHunt", true), "No activation before a level load");
+        policy.BeginLevel(false);
+        ModOptions.EnableCrystalHunt = true;
+        Check(!policy.ShouldApply("CrystalHunt", "DungeonOutpost", "CrystalHunt", true), "Enabling mid-level is deferred");
+        policy.BeginLevel(ModOptions.EnableCrystalHunt);
+        Check(policy.ShouldApply("CrystalHunt", "DungeonOutpost", "CrystalHunt", true), "Next dungeon activates option");
+        Check(policy.ShouldApply("CrystalHunt", "DungeonDalgarian", "CrystalHunt", true), "Dalgarian dungeon supported");
+        Check(policy.ShouldApply("CrystalHunt", "CustomDungeon", "CustomMode", true), "Custom area dungeons supported");
+        ModOptions.EnableCrystalHunt = false;
+        Check(policy.ShouldApply("CrystalHunt", "DungeonOutpost", "CrystalHunt", true), "Disabling mid-level is deferred");
+        foreach (var id in new[] { "Home", "mainMenu", "Master", "CharacterSelection" })
+            Check(!policy.ShouldApply("CrystalHunt", id, "CrystalHunt", true), "Never activate in " + id);
+        Check(!policy.ShouldApply("CrystalHunt", "Shop", "CrystalHunt", false), "Shop excluded");
+        Check(!policy.ShouldApply("CrystalHunt", "Arena", "WaveAssault", false), "Arena excluded");
+        Check(!policy.ShouldApply("Unknown", "DungeonOutpost", "CrystalHunt", true), "Other game modes excluded");
+        Check(!policy.ShouldApply("Sandbox", "Arena", "Sandbox", false), "Standard Sandbox unaffected");
+        Check(policy.ShouldApply("Sandbox", "Arena", GettingIt.ModeName, false), "Dedicated Sandbox mode still works");
+        policy.BeginLevel(ModOptions.EnableCrystalHunt);
+        Check(!policy.ShouldApply("CrystalHunt", "DungeonOutpost", "CrystalHunt", true), "Disable applies on next level");
     }
 }
 

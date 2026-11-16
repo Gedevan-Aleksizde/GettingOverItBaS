@@ -16,5 +16,34 @@
       "name": "등반용 망치",
       "description": "반작용으로 몸을 들어 올리는 양손 망치입니다."
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "고급"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "크리스털 헌트"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>경고</color></b>\n활성화하면 진행이 불가능해지거나 소지 아이템을 잃을 수 있습니다. 다음 레벨 이동부터 크리스털 헌트 던전에 Getting Over It 규칙을 적용합니다. 기본값은 비활성입니다."
+        }
+      ]
+    }
   ]
 }

@@ -16,5 +16,34 @@
       "name": "Climbing Hammer",
       "description": "A two-handed hammer for climbing by physical reaction."
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "Advanced"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "Crystal Hunt"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>CAUTION!</color></b>\nEnabling this option may make progression impossible or cause loss of carried items. Applies Getting Over It rules in Crystal Hunt dungeons from the next level transition. Default: Disabled."
+        }
+      ]
+    }
   ]
 }

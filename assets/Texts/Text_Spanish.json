@@ -16,5 +16,34 @@
       "name": "Martillo de escalada",
       "description": "Martillo a dos manos para escalar mediante la reacción física."
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "Avanzado"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "Caza de cristales"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>¡ADVERTENCIA!</color></b>\nActivar esta opción puede impedir el progreso o causar la pérdida de objetos transportados. Aplica las reglas de Getting Over It en las mazmorras de Caza de cristales al cambiar de nivel. Desactivado por defecto."
+        }
+      ]
+    }
   ]
 }

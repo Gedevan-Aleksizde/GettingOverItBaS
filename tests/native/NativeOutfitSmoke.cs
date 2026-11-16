@@ -53,6 +53,7 @@ public static class NativeOutfitSmoke
 
     public static string Run()
     {
+        RunActivationEvents();
         var root = new GameObject("Native outfit test");
         root.SetActive(false); // Construct real components without starting the full game's managers.
         var creature = root.AddComponent<Creature>();
@@ -106,6 +107,31 @@ public static class NativeOutfitSmoke
         }
         UnityEngine.Object.DestroyImmediate(root);
         return "PASS: " + checks + " Unity-native outfit assertions (real Equipment and Manikin components)";
+    }
+
+    private static void RunActivationEvents()
+    {
+        var script = new GettingIt();
+        script.ScriptEnable();
+        try
+        {
+            var policy = (LevelActivation)typeof(GettingIt).GetField("activation", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(script);
+            var level = new LevelData { id = "DungeonOutpost" };
+            var mode = new LevelData.Mode { name = "CrystalHunt" };
+            ModOptions.EnableCrystalHunt = false;
+            EventManager.InvokeLevelLoad(level, mode, EventTime.OnStart);
+            ModOptions.EnableCrystalHunt = true;
+            EventManager.InvokeLevelLoad(level, mode, EventTime.OnEnd);
+            Check(!policy.ShouldApply("CrystalHunt", level.id, mode.name, true), "option change during load waits for next level");
+            EventManager.InvokeLevelLoad(level, mode, EventTime.OnStart);
+            Check(policy.ShouldApply("CrystalHunt", level.id, mode.name, true), "native level-start event activates Crystal Hunt");
+            ModOptions.EnableCrystalHunt = false;
+            EventManager.InvokeLevelLoad(level, mode, EventTime.OnEnd);
+            Check(policy.ShouldApply("CrystalHunt", level.id, mode.name, true), "native level-end event cannot change latched option");
+            EventManager.InvokeLevelLoad(level, mode, EventTime.OnStart);
+            Check(!policy.ShouldApply("CrystalHunt", level.id, mode.name, true), "next native level-start applies disable");
+        }
+        finally { ModOptions.EnableCrystalHunt = false; script.ScriptDisable(); }
     }
 
     private static ManikinWardrobeData Part(string name, string channel, int layer)

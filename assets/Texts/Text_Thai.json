@@ -16,5 +16,34 @@
       "name": "ค้อนปีนป่าย",
       "description": "ค้อนสองมือสำหรับปีนป่ายด้วยแรงปฏิกิริยา"
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "ขั้นสูง"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "ล่าคริสตัล"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "<b><color=#FF5555>คำเตือน</color></b>\nการเปิดใช้งานอาจทำให้เล่นต่อไม่ได้หรือสูญเสียไอเทมที่พกติดตัว ใช้กฎ Getting Over It ในดันเจี้ยนล่าคริสตัลเมื่อเปลี่ยนด่านครั้งถัดไป ค่าเริ่มต้นคือปิดใช้งาน"
+        }
+      ]
+    }
   ]
 }

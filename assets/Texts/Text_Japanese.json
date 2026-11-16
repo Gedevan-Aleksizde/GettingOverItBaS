@@ -16,5 +16,34 @@
       "name": "登攀用ハンマー",
       "description": "登山用の両手持ちハンマーです。"
     }
+  ],
+  "textGroups": [
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOptCat",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "Advanced",
+          "text": "詳細設定"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "GettingOverItOpt",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt",
+          "text": "クリスタルハント"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "CrystalHunt_desc",
+          "text": "クリスタルハントモードでも有効にします。<b><color=#FF5555>警告</color></b>\n有効にするとゲームが進行不能に陥ったり、所持アイテムを失ったりするおそれがあります。次回のマップ移動から有効になります。デフォルトは「無効」です。"
+        }
+      ]
+    }
   ]
 }

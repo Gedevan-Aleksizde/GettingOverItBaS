@@ -15,6 +15,7 @@ namespace GettingOverIt
         private readonly HashSet<LevelData> failedRegistration = new HashSet<LevelData>();
         private Session session;
         private bool leaving;
+        private readonly LevelActivation activation = new LevelActivation();
 
         public static bool Eligible(string id) => !string.IsNullOrEmpty(id)
             && !id.Equals("Home", StringComparison.OrdinalIgnoreCase)
@@ -25,8 +26,9 @@ namespace GettingOverIt
         public override void ScriptEnable()
         {
             EventManager.onLevelUnload += OnLevelUnload;
+            EventManager.onLevelLoad += OnLevelLoad;
             EventManager.onCreatureDespawn += OnCreatureDespawn;
-            Debug.Log("[GettingOverIt] Script enabled (1.1.2)");
+            Debug.Log("[GettingOverIt] Script enabled (1.2.0)");
         }
 
         public override void ScriptUpdate()
@@ -53,8 +55,9 @@ namespace GettingOverIt
 
             var current = Level.current;
             var creature = Player.currentCreature;
-            bool active = !leaving && current != null && Eligible(current.data?.id)
-                && current.mode?.name == ModeName && Player.characterData?.mode?.data?.id == "Sandbox";
+            bool dungeon = current?.mode?.modules?.Any(module => module is LevelAreaModule) == true;
+            bool active = !leaving && current != null && activation.ShouldApply(
+                Player.characterData?.mode?.data?.id, current.data?.id, current.mode?.name, dungeon);
             if (session != null && (!active || session.Creature != creature)) EndSession();
             if (active && session == null && creature != null && creature.loaded && !creature.isKilled
                 && Player.local != null && creature.container.contentLoaded && creature.equipment != null
@@ -116,6 +119,11 @@ namespace GettingOverIt
             EndSession();
         }
 
+        private void OnLevelLoad(LevelData data, LevelData.Mode mode, EventTime time)
+        {
+            if (time == EventTime.OnStart) activation.BeginLevel(ModOptions.EnableCrystalHunt);
+        }
+
         private void EndSession()
         {
             var old = session;
@@ -131,6 +139,7 @@ namespace GettingOverIt
         public override void ScriptDisable()
         {
             EventManager.onLevelUnload -= OnLevelUnload;
+            EventManager.onLevelLoad -= OnLevelLoad;
             EventManager.onCreatureDespawn -= OnCreatureDespawn;
             EndSession();
             foreach (var level in registered) level.modes.RemoveAll(m => m.name == ModeName);
