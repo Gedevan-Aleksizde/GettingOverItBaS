@@ -6,6 +6,7 @@
     <GameManaged>C:/Program Files (x86)/Steam/steamapps/common/Blade &amp; Sorcery/BladeAndSorcery_Data/Managed</GameManaged>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="native/**/*.cs" />
     <Reference Include="../bin/Release/net472/GettingOverIt.dll" Private="false" />
     <Reference Include="$(GameManaged)/ThunderRoad.dll" Private="false" />
     <Reference Include="$(GameManaged)/ThunderRoad.Manikin.dll" Private="false" />

@@ -11,7 +11,8 @@ namespace GettingOverIt
     {
         public override IEnumerator LoadAddressableAssetsCoroutine(ItemData data)
         {
-            yield return PotMesh.LoadMaterial();
+            // The catalog loads assets BEFORE ThunderScript.ScriptLoaded runs.
+            yield return OriginalPot.LoadAssets(data.owner?.fullPath);
             if (wardrobes.TrueForAll(w => w.manikinWardrobeData != null)) yield break;
             yield return base.LoadAddressableAssetsCoroutine(data);
             foreach (var wardrobe in wardrobes)
@@ -21,9 +22,11 @@ namespace GettingOverIt
                 clone.name = "GettingOverItPot_" + wardrobe.creatureName;
                 clone.assetPrefab = new AssetReferenceManikinPart("");
                 clone.dependencies = new ManikinWardrobeData[0];
-                clone.fullyOccludedLayers = new int[clone.layers.Length];
-                clone.partialOccludedLayers = new int[clone.layers.Length];
-                clone.partialOccludedMasks = new int[clone.layers.Length];
+                clone.channels = new[] { "Torso" };
+                clone.layers = new[] { 30 };
+                clone.fullyOccludedLayers = new int[1];
+                clone.partialOccludedLayers = new int[1];
+                clone.partialOccludedMasks = new int[1];
                 clone.occlusionID = "";
                 clone.occlusionIDHash = 0;
                 wardrobe.manikinWardrobeData = clone;
@@ -43,8 +46,9 @@ namespace GettingOverIt
         public override void OnItemLoaded(Item item)
         {
             base.OnItemLoaded(item);
+            if (!OriginalPot.IsReady) return;
             foreach (var renderer in item.GetComponentsInChildren<Renderer>()) renderer.enabled = false;
-            PotMesh.Attach(item.transform, 0.22f);
+            OriginalPot.Attach(item.transform, 0.22f);
         }
     }
 
@@ -52,6 +56,7 @@ namespace GettingOverIt
     {
         public override void OnEquip(Creature creature, ApparelModuleType equippedOn, ItemModuleWardrobe.CreatureWardrobe wardrobeData)
         {
+            if (!OriginalPot.IsReady) return;
             var pot = creature.GetComponent<WornPot>() ?? creature.gameObject.AddComponent<WornPot>();
             pot.Initialize(creature);
         }
@@ -74,7 +79,7 @@ namespace GettingOverIt
             restored = false;
             creature = target;
             // The locomotion origin stays at the feet while the torso crouches into the pot.
-            visual = PotMesh.Attach(creature.currentLocomotion.transform, 1f);
+            visual = OriginalPot.Attach(creature.currentLocomotion.transform, 1f);
             if (creature.isPlayer && Player.local != null)
             {
                 oldMove = Player.local.locomotion.allowMove;
@@ -105,91 +110,59 @@ namespace GettingOverIt
         private void OnDestroy() { Restore(); }
     }
 
-    public static class PotMesh
+    public static class OriginalPot
     {
-        private static GameObject materialPrefab;
-        private static Material materialSource;
-
-        public static IEnumerator LoadMaterial()
+        private static AssetBundle bundle;
+        private static GameObject prefab;
+        private static AssetBundleCreateRequest pendingBundle;
+        private static AssetBundleRequest pendingPrefab;
+        public static bool IsReady => prefab != null;
+        public static string GetBundlePath(string modPath) => System.IO.Path.Combine(modPath, "Models", "gettingoverit-original-pot.bundle");
+        public static IEnumerator LoadAssets(string owningModPath)
         {
-            if (materialSource != null) yield break;
-            var data = Catalog.GetData<ItemData>("MetalPottery_01", true);
-            if (data == null) throw new System.InvalidOperationException("MetalPottery_01 material source missing");
-            yield return Catalog.LoadAssetCoroutine<GameObject>(data.prefabAddress, prefab =>
+            if (prefab != null) yield break;
+            if (string.IsNullOrWhiteSpace(owningModPath))
             {
-                materialPrefab = prefab;
-                if (prefab == null) return;
-                foreach (var renderer in prefab.GetComponentsInChildren<Renderer>(true))
-                    foreach (var material in renderer.sharedMaterials)
-                        if (material != null && material.shader != null && material.shader.isSupported)
-                        {
-                            materialSource = material;
-                            return;
-                        }
-            }, "GettingOverIt pot material");
-            if (materialSource == null) throw new System.InvalidOperationException("No supported material on MetalPottery_01");
+                Debug.LogError("[GettingOverIt] Pot item has no owning mod path; skipping pot assets without blocking catalog loading");
+                yield break;
+            }
+            var bundlePath = GetBundlePath(owningModPath);
+            if (!System.IO.File.Exists(bundlePath))
+            {
+                Debug.LogError("[GettingOverIt] Pot bundle missing: " + bundlePath);
+                yield break;
+            }
+            if (bundle == null)
+            {
+                var load = pendingBundle ?? (pendingBundle = AssetBundle.LoadFromFileAsync(bundlePath));
+                yield return load;
+                bundle = load.assetBundle;
+                pendingBundle = null;
+            }
+            if (bundle == null)
+            {
+                Debug.LogError("[GettingOverIt] Cannot load original pot bundle: " + bundlePath);
+                yield break;
+            }
+            var request = pendingPrefab ?? (pendingPrefab = bundle.LoadAssetAsync<GameObject>("Assets/Original/GettingOverItPot.prefab"));
+            yield return request;
+            prefab = request.asset as GameObject;
+            pendingPrefab = null;
+            if (prefab == null) Debug.LogError("[GettingOverIt] Original pot prefab missing from bundle");
         }
-
-        public static void ReleaseMaterial()
-        {
-            materialSource = null;
-            if (materialPrefab != null) Catalog.ReleaseAsset(materialPrefab);
-            materialPrefab = null;
-        }
-        // Lathed cross-section closes the bottom and rim, with an open, hollow interior.
-        public static readonly Vector2[] Profile = {
-            new Vector2(0, 0.04f), new Vector2(0.27f, 0.04f),
-            new Vector2(0.39f, 0.18f), new Vector2(0.43f, 0.43f),
-            new Vector2(0.38f, 0.72f), new Vector2(0.34f, 0.79f),
-            new Vector2(0.30f, 0.79f), new Vector2(0.34f, 0.70f),
-            new Vector2(0.38f, 0.43f), new Vector2(0.34f, 0.20f),
-            new Vector2(0.24f, 0.10f), new Vector2(0, 0.10f)
-        };
         public static GameObject Attach(Transform bone, float scale)
         {
-            var go = new GameObject("GettingOverIt_Pot");
-            go.transform.SetParent(bone, false);
-            var renderer = go.AddComponent<SkinnedMeshRenderer>();
-            const int segments = 48;
-            var vertices = new List<Vector3>();
-            var triangles = new List<int>();
-            var weights = new List<BoneWeight>();
-            var uv = new List<Vector2>();
-            for (int ring = 0; ring < Profile.Length; ring++)
-                for (int i = 0; i <= segments; i++)
-                {
-                    float angle = i * Mathf.PI * 2 / segments;
-                    vertices.Add(new Vector3(Mathf.Cos(angle) * Profile[ring].x, Profile[ring].y, Mathf.Sin(angle) * Profile[ring].x) * scale);
-                    weights.Add(new BoneWeight { boneIndex0 = 0, weight0 = 1 });
-                    uv.Add(new Vector2((float)i / segments, (float)ring / (Profile.Length - 1)));
-                    if (ring == 0 || i == segments) continue;
-                    int a = (ring - 1) * (segments + 1) + i, b = ring * (segments + 1) + i;
-                    triangles.Add(a); triangles.Add(b); triangles.Add(a + 1);
-                    triangles.Add(a + 1); triangles.Add(b); triangles.Add(b + 1);
-                }
-            var mesh = new Mesh { name = "GettingOverIt_PotMesh" };
-            mesh.SetVertices(vertices); mesh.SetTriangles(triangles, 0);
-            mesh.SetUVs(0, uv);
-            mesh.boneWeights = weights.ToArray();
-            mesh.bindposes = new[] { bone.worldToLocalMatrix * go.transform.localToWorldMatrix };
-            mesh.RecalculateNormals(); mesh.RecalculateBounds();
-            mesh.RecalculateTangents();
-            renderer.sharedMesh = mesh;
-            renderer.bones = new[] { bone }; renderer.rootBone = bone;
-            renderer.updateWhenOffscreen = true;
-            if (materialSource == null) throw new System.InvalidOperationException("Pot material not loaded");
-            var material = new Material(materialSource) { name = "GettingOverIt_PotMaterial" };
-            if (material.HasProperty("_Bitmask")) material.SetFloat("_Bitmask", 0);
-            renderer.sharedMaterial = material;
-            var resources = go.AddComponent<PotResources>(); resources.Mesh = mesh; resources.Material = material;
-            return go;
+            if (prefab == null) throw new System.InvalidOperationException("Original pot prefab not loaded");
+            var visual = Object.Instantiate(prefab, bone, false);
+            visual.name = "GettingOverIt_OriginalPot";
+            visual.transform.localScale *= scale;
+            return visual;
         }
-    }
-
-    public class PotResources : MonoBehaviour
-    {
-        public Mesh Mesh;
-        public Material Material;
-        private void OnDestroy() { if (Mesh != null) Destroy(Mesh); if (Material != null) Destroy(Material); }
+        public static void Release()
+        {
+            prefab = null;
+            if (bundle != null) bundle.Unload(false);
+            bundle = null;
+        }
     }
 }

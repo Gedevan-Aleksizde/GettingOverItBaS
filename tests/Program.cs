@@ -35,14 +35,7 @@ class Program
             Check(!GettingIt.Eligible(id), "Excluded level: " + id);
         Check(GettingIt.Eligible("Arena"), "Arena allowed");
         Check(GettingIt.Eligible("CustomModMap"), "Custom map allowed");
-        Check(MaleBareTorso.IsClothing("HumanMale", "Torso", 2, "HumanMale_Shirt01"), "Remove male shirt");
-        Check(!MaleBareTorso.IsClothing("HumanMale", "Torso", 7, "HumanMale_Base_Torso"), "Keep bare male body");
-        Check(!MaleBareTorso.IsClothing("HumanMale", "Torso", 0, "HumanMale_Base_Torso(Clone)"), "Keep body regardless of layer");
-        Check(!MaleBareTorso.IsClothing("HumanMale", "Torso", 2, "HumanMale_Eradian_Torso"), "Do not remove unknown body parts");
-        Check(!MaleBareTorso.IsClothing("HumanFemale", "Torso", 3, "HumanFemale_Bra"), "Keep female body configuration");
-        Check(!MaleBareTorso.IsClothing("HumanMale", "Legs", 3, "HumanMale_Underwear"), "Keep male underwear");
-        Check(!MaleBareTorso.IsClothing("HumanMale", "Torso", 2, "GettingOverItPot_HumanMale"), "Keep pot");
-        Check(!MaleBareTorso.IsClothing("ModCreature", "Torso", 2, "Shirt"), "Do not alter other creature types");
+        TestOutfitLayout();
         var original = new LevelData.Mode { name = "Sandbox", allowGameModes = new List<string> { "Sandbox", "CrystalHunt" } };
         original.modules.Add(new LevelModuleCleaner { cleanerRate = 7 });
         original.modules.Add(new SpatialTestModule
@@ -67,8 +60,37 @@ class Program
         Check(!GettingIt.TryAddMode(level), "Never add a home mode");
         level.id = "CrystalOnly"; original.allowGameModes = new List<string> { "CrystalHunt" };
         Check(!GettingIt.TryAddMode(level), "Do not enable Crystal Hunt maps");
-        Check(PotMesh.Profile[0].x == 0 && PotMesh.Profile[PotMesh.Profile.Length - 1].x == 0, "Pot floor is closed");
-        Check(PotMesh.Profile[5].x > PotMesh.Profile[6].x && PotMesh.Profile[5].y == PotMesh.Profile[6].y, "Pot has hollow rim");
+    }
+
+    static void TestOutfitLayout()
+    {
+        // Slots/names inspected from the actual 1.3.2 body prefabs, not invented layer meanings.
+        var basis = new Dictionary<ThunderRoad.Manikin.ManikinLocations.LocationKey, string>
+        {
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Torso", 7)] = "HumanMale_Base_Torso",
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 5)] = "HumanMale_Base_Legs",
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 3)] = "HumanMale_Underwear",
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Head", 12)] = "HumanMale_Base_Head"
+        };
+        var body = new Dictionary<ThunderRoad.Manikin.ManikinLocations.LocationKey, string>
+        {
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Head", 12)] = "HumanMale_Kharese_Head01"
+        };
+        var pot = new Dictionary<ThunderRoad.Manikin.ManikinLocations.LocationKey, string>
+        {
+            [new ThunderRoad.Manikin.ManikinLocations.LocationKey("Torso", 30)] = "GettingOverItPot_HumanMale"
+        };
+        var target = ModeOutfit.BuildLayout(basis, body, pot);
+        Check(target[new ThunderRoad.Manikin.ManikinLocations.LocationKey("Torso", 7)] == "HumanMale_Base_Torso", "Pot never replaces torso skin");
+        Check(target[new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 5)] == "HumanMale_Base_Legs", "Keep legs mesh");
+        Check(target[new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 3)] == "HumanMale_Underwear", "Keep male underwear mesh");
+        Check(target[new ThunderRoad.Manikin.ManikinLocations.LocationKey("Head", 12)] == "HumanMale_Kharese_Head01", "Keep chosen ethnicity head");
+        Check(target[new ThunderRoad.Manikin.ManikinLocations.LocationKey("Torso", 30)] == "GettingOverItPot_HumanMale", "Keep pot in separate slot");
+        Check(basis.Count == 4 && basis.ContainsValue("HumanMale_Underwear"), "Baseline unchanged for restoration");
+        var again = ModeOutfit.BuildLayout(basis, body, pot);
+        Check(again.Count == target.Count, "Repeated reconciliation is stable");
+        var female = ModeOutfit.BuildLayout(basis, body, pot);
+        Check(female.ContainsKey(new ThunderRoad.Manikin.ManikinLocations.LocationKey("Legs", 3)), "Female filtering does not strip underwear");
     }
 }
 

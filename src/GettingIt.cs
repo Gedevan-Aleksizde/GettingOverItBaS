@@ -26,7 +26,7 @@ namespace GettingOverIt
         {
             EventManager.onLevelUnload += OnLevelUnload;
             EventManager.onCreatureDespawn += OnCreatureDespawn;
-            Debug.Log("[GettingOverIt] Script enabled (1.0.3)");
+            Debug.Log("[GettingOverIt] Script enabled (1.1.2)");
         }
 
         public override void ScriptUpdate()
@@ -56,8 +56,9 @@ namespace GettingOverIt
             bool active = !leaving && current != null && Eligible(current.data?.id)
                 && current.mode?.name == ModeName && Player.characterData?.mode?.data?.id == "Sandbox";
             if (session != null && (!active || session.Creature != creature)) EndSession();
-            if (active && session == null && creature != null && !creature.isKilled
+            if (active && session == null && creature != null && creature.loaded && !creature.isKilled
                 && Player.local != null && creature.container.contentLoaded && creature.equipment != null
+                && creature.equipment.GetPendingApparelLoading() == 0 && creature.manikinLocations.PendingHandles() == 0
                 && creature.mana?.casterLeft != null && creature.mana.casterRight != null)
             {
                 try
@@ -68,7 +69,14 @@ namespace GettingOverIt
                 }
                 catch (Exception ex) { Debug.LogError("[GettingOverIt] Setup failed: " + ex); EndSession(); leaving = true; unloadingLevel = current; }
             }
-            session?.Update();
+            try { session?.Update(); }
+            catch (Exception ex)
+            {
+                Debug.LogError("[GettingOverIt] Runtime setup failed; restoring player: " + ex);
+                EndSession();
+                leaving = true;
+                unloadingLevel = current;
+            }
             if (session?.Failed == true)
             {
                 Debug.LogError("[GettingOverIt] Required item spawn failed; restoring player.");
@@ -134,14 +142,15 @@ namespace GettingOverIt
         {
             public Creature Creature { get; }
             public bool Failed { get; private set; }
-            private ItemContent[] worn;
             private ItemContent pot;
             private Item hammer;
             private bool disposed;
             private bool oldMove, oldTurn, oldJump, oldCrouch;
             private SavedSpells spells;
             private bool savedSpells;
-            private MaleBareTorso bareTorso;
+            private ModeOutfit outfit;
+            private bool outfitVerified;
+            private float outfitSetupStarted;
             private readonly List<SpellPowerSlowTime> powers = new List<SpellPowerSlowTime>();
             private readonly List<(Item item, Holder holder, RagdollHand hand)> stored = new List<(Item, Holder, RagdollHand)>();
 
@@ -159,13 +168,10 @@ namespace GettingOverIt
                 var hammerData = Catalog.GetData<ItemData>("GOILongHammer", true);
                 var potData = Catalog.GetData<ItemData>("GOIPot", true);
                 if (hammerData == null || potData == null) throw new InvalidOperationException("Required items missing");
-                worn = Creature.equipment.GetWornContents().Where(c => c.data.GetModule<ItemModuleWardrobe>()?.category != Equipment.WardRobeCategory.Body).ToArray();
-                if (Creature.data.name == "HumanMale")
-                {
-                    bareTorso = new MaleBareTorso(Creature.manikinLocations);
-                }
-                foreach (var content in worn) Creature.equipment.UnequipWardrobe(content);
-                bareTorso?.Apply(Creature.data.name);
+                if (!OriginalPot.IsReady) throw new InvalidOperationException("Original pot assets did not load; see the earlier asset error");
+                outfit = new ModeOutfit(Creature);
+                outfitSetupStarted = Time.unscaledTime;
+                outfit.Enforce(null);
                 foreach (var holder in Creature.container.linkedHolders)
                     foreach (var item in holder.items.ToArray()) Store(item, holder, null);
                 Store(Creature.handLeft.grabbedHandle?.item, null, Creature.handLeft);
@@ -190,6 +196,7 @@ namespace GettingOverIt
                     pot = Creature.container.AddItemContent(potData);
                     Creature.equipment.EquipWardrobe(pot);
                     if (!pot.HasState<ContentStateWorn>()) Failed = true;
+                    outfit.Enforce(pot);
                 }, Creature.handLeft.transform.position, pooled: false);
                 Player.crouchOnJump = false;
                 Player.TogglePlayerMovement(false);
@@ -224,12 +231,18 @@ namespace GettingOverIt
             public void Update()
             {
                 if (Creature == null) return;
-                bareTorso?.Apply(Creature.data.name);
+                outfit?.Enforce(pot);
+                foreach (var holder in Creature.container.linkedHolders)
+                    foreach (var item in holder.items.ToArray())
+                        if (item != hammer) Store(item, holder, null);
                 if (pot != null && !pot.HasState<ContentStateWorn>())
                 {
                     if (!Creature.container.contents.Contains(pot)) Creature.container.AddItemContent(pot);
                     Creature.equipment.EquipWardrobe(pot);
                 }
+                if (pot != null && !outfitVerified) outfitVerified = outfit.Verify(pot);
+                if (!outfitVerified && Time.unscaledTime - outfitSetupStarted > 15f)
+                    throw new InvalidOperationException("Outfit/torso verification timed out; restoring the original outfit");
                 Player.TogglePlayerMovement(false);
                 Player.TogglePlayerJump(false);
                 Player.TogglePlayerTurn(true);
@@ -246,8 +259,7 @@ namespace GettingOverIt
                     Creature.handRight.OnUnGrabEvent -= OnRelease;
                     if (hammer != null) hammer.Despawn();
                     if (pot != null) { Creature.equipment.UnequipWardrobe(pot); Creature.container.RemoveContent(pot); }
-                    bareTorso?.Dispose();
-                    if (worn != null) foreach (var content in worn) Creature.equipment.EquipWardrobe(content);
+                    outfit?.Dispose();
                     foreach (var entry in stored)
                     {
                         if (entry.item == null) continue;
@@ -276,14 +288,14 @@ namespace GettingOverIt
                     Player.TogglePlayerTurn(oldTurn);
                 }
                 Player.crouchOnJump = oldCrouch;
-                bareTorso?.Dispose();
+                outfit?.Dispose();
             }
         }
 
         public override void ScriptUnload()
         {
             EndSession();
-            PotMesh.ReleaseMaterial();
+            OriginalPot.Release();
         }
     }
 }
