@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "水晶狩猎"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>警告</color></b>\n启用此选项可能导致无法推进流程或丢失携带的物品。从下次关卡切换起，在水晶狩猎地牢中应用Getting Over It规则。默认禁用。"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "利用锤子的反作用力攀爬。禁止摇杆移动和魔法。"
         }
       ]
     }

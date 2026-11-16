@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "クリスタルハント"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
-          "text": "クリスタルハントモードでも有効にします。<b><color=#FF5555>警告</color></b>\n有効にするとゲームが進行不能に陥ったり、所持アイテムを失ったりするおそれがあります。次回のマップ移動から有効になります。デフォルトは「無効」です。"
+          "text": "次回のマップ移動からクリスタルハントのダンジョンがGetting Over Itモードを適用します。<b><color=#FF5555>警告</color></b>\n有効にするとゲームが進行不能となったり、所持アイテムを失ったりするおそれがあります。デフォルトは「無効」です。"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "ハンマーの反作用だけで上を目指してください。スティック移動と魔法は禁止です。"
         }
       ]
     }

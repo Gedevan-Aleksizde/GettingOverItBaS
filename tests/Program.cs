@@ -47,6 +47,8 @@ class Program
         var level = new LevelData { id = "Arena", modes = new List<LevelData.Mode> { original } };
         Check(GettingIt.TryAddMode(level), "Register Sandbox mode");
         Check(level.modes.Count == 2, "Preserve original mode");
+        Check(level.modes[1].displayName == GettingIt.ModeName, "Map mode title resolves through Default group");
+        Check(level.modes[1].description == GettingIt.ModeDescriptionId, "Map mode description uses localization ID");
         Check(level.modes[1].allowGameModes.Count == 1 && level.modes[1].allowGameModes[0] == "Sandbox", "Restrict to Sandbox");
         level.modes[1].allowGameModes.Clear();
         Check(original.allowGameModes.Count == 2, "Do not mutate original mode");

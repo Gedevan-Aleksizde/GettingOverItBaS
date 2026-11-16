@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "Crystal Hunt"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>CAUTION!</color></b>\nEnabling this option may make progression impossible or cause loss of carried items. Applies Getting Over It rules in Crystal Hunt dungeons from the next level transition. Default: Disabled."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "Climb using your hammer. Stick movement and magic are disabled."
         }
       ]
     }

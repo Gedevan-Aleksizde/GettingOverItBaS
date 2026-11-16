@@ -11,6 +11,7 @@ namespace GettingOverIt
     public class GettingIt : ThunderScript
     {
         public const string ModeName = "GettingOverIt";
+        public const string ModeDescriptionId = "GettingOverIt_Description";
         private readonly HashSet<LevelData> registered = new HashSet<LevelData>();
         private readonly HashSet<LevelData> failedRegistration = new HashSet<LevelData>();
         private Session session;
@@ -28,7 +29,7 @@ namespace GettingOverIt
             EventManager.onLevelUnload += OnLevelUnload;
             EventManager.onLevelLoad += OnLevelLoad;
             EventManager.onCreatureDespawn += OnCreatureDespawn;
-            Debug.Log("[GettingOverIt] Script enabled (1.2.0)");
+            Debug.Log("[GettingOverIt] Script enabled (1.2.1)");
         }
 
         public override void ScriptUpdate()
@@ -105,8 +106,9 @@ namespace GettingOverIt
             var settings = Catalog.GetJsonNetSerializerSettings();
             var mode = JsonConvert.DeserializeObject<LevelData.Mode>(JsonConvert.SerializeObject(original, settings), settings);
             mode.name = ModeName;
-            mode.displayName = "Getting Over It";
-            mode.description = "Climb using your hammer. Movement and magic are disabled.";
+            // UIMapLevelMode resolves name, displayName and description in the Default text group.
+            mode.displayName = ModeName;
+            mode.description = ModeDescriptionId;
             mode.allowGameModes = new List<string> { "Sandbox" };
             level.modes.Add(mode);
             return true;

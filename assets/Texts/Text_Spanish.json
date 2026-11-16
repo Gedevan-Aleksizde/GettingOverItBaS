@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "Caza de cristales"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>¡ADVERTENCIA!</color></b>\nActivar esta opción puede impedir el progreso o causar la pérdida de objetos transportados. Aplica las reglas de Getting Over It en las mazmorras de Caza de cristales al cambiar de nivel. Desactivado por defecto."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "Escala usando el martillo. El movimiento con la palanca y la magia están desactivados."
         }
       ]
     }

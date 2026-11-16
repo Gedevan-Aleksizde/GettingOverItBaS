@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "Chasse aux cristaux"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>ATTENTION !</color></b>\nActiver cette option peut bloquer la progression ou entraîner la perte des objets transportés. Applique les règles de Getting Over It dans les donjons de Chasse aux cristaux au prochain changement de niveau. Désactivé par défaut."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "Grimpez à l’aide de votre marteau. Le déplacement au joystick et la magie sont désactivés."
         }
       ]
     }

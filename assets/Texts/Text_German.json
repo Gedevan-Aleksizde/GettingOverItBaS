@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "Kristalljagd"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>ACHTUNG!</color></b>\nDas Aktivieren kann den Fortschritt unmöglich machen oder zum Verlust mitgeführter Gegenstände führen. Wendet Getting-Over-It-Regeln ab dem nächsten Levelwechsel in Kristalljagd-Dungeons an. Standard: Deaktiviert."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "Klettere mithilfe deines Hammers. Bewegung per Stick und Magie sind deaktiviert."
         }
       ]
     }

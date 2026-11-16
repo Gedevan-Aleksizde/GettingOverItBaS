@@ -4,7 +4,7 @@ namespace GettingOverIt
 {
     public static class ModOptions
     {
-        [ModOption("Crystal Hunt", "A", nameLocalizationId = "GettingOverItOpt.CrystalHunt",
+        [ModOption("Getting Over it with Crystal Hunt", "A", nameLocalizationId = "GettingOverItOpt.CrystalHunt",
             tooltipLocalizationId = "GettingOverItOpt.CrystalHunt_desc", defaultValueIndex = 0, order = 0)]
         [ModOptionCategory("Advanced", 0, "GettingOverItOptCat.Advanced")]
         public static bool EnableCrystalHunt = false;

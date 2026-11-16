@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "크리스털 헌트"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>경고</color></b>\n활성화하면 진행이 불가능해지거나 소지 아이템을 잃을 수 있습니다. 다음 레벨 이동부터 크리스털 헌트 던전에 Getting Over It 규칙을 적용합니다. 기본값은 비활성입니다."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "망치의 반작용으로 등반합니다. 스틱 이동과 마법이 비활성화됩니다."
         }
       ]
     }

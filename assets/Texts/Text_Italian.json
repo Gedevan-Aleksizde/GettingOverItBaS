@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "Caccia ai cristalli"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>ATTENZIONE!</color></b>\nAttivare questa opzione può impedire la progressione o causare la perdita degli oggetti trasportati. Applica le regole di Getting Over It nei dungeon di Caccia ai cristalli dal prossimo cambio di livello. Disattivato per impostazione predefinita."
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "Arrampicati usando il martello. Il movimento con la levetta e la magia sono disattivati."
         }
       ]
     }

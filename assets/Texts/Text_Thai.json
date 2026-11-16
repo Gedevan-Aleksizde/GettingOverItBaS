@@ -36,12 +36,28 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt",
-          "text": "ล่าคริสตัล"
+          "text": "Getting Over it with Crystal Hunt"
         },
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "CrystalHunt_desc",
           "text": "<b><color=#FF5555>คำเตือน</color></b>\nการเปิดใช้งานอาจทำให้เล่นต่อไม่ได้หรือสูญเสียไอเทมที่พกติดตัว ใช้กฎ Getting Over It ในดันเจี้ยนล่าคริสตัลเมื่อเปลี่ยนด่านครั้งถัดไป ค่าเริ่มต้นคือปิดใช้งาน"
+        }
+      ]
+    },
+    {
+      "$type": "ThunderRoad.TextData+TextGroup, ThunderRoad",
+      "id": "Default",
+      "texts": [
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt",
+          "text": "Getting Over It"
+        },
+        {
+          "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
+          "id": "GettingOverIt_Description",
+          "text": "ปีนป่ายด้วยค้อน ปิดการเคลื่อนที่ด้วยสติ๊กและการใช้เวทมนตร์"
         }
       ]
     }
