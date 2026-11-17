@@ -78,8 +78,10 @@ namespace GettingOverIt
             if (visual != null) Restore();
             restored = false;
             creature = target;
-            // The locomotion origin stays at the feet while the torso crouches into the pot.
-            visual = OriginalPot.Attach(creature.currentLocomotion.transform, 1f);
+            // Player.UpdateBody offsets the creature from the VR locomotion origin to follow
+            // the headset. The creature root is its actual foot position and stays at floor
+            // height when crouching; the locomotion origin is only the playspace reference.
+            visual = OriginalPot.Attach(creature.transform, 1f);
             if (creature.isPlayer && Player.local != null)
             {
                 oldMove = Player.local.locomotion.allowMove;

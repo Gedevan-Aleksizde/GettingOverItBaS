@@ -29,7 +29,7 @@ namespace GettingOverIt
             EventManager.onLevelUnload += OnLevelUnload;
             EventManager.onLevelLoad += OnLevelLoad;
             EventManager.onCreatureDespawn += OnCreatureDespawn;
-            Debug.Log("[GettingOverIt] Script enabled (1.2.1)");
+            Debug.Log("[GettingOverIt] Script enabled (1.2.2)");
         }
 
         public override void ScriptUpdate()

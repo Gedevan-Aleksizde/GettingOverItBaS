@@ -32,12 +32,47 @@ public static class NativeOutfitSmoke
                 Check(material != null && material.shader != null && material.shader.isSupported
                     && material.enableInstancing && material.mainTexture != null && material.mainTexture.name == "Pottexture", "startup pot material supports instanced stereo");
         UnityEngine.Object.DestroyImmediate(visual);
+        CheckPotAlignment();
         OriginalPot.Release();
         // A missing asset must not abort the game's catalog-loading coroutine.
         var missing = module.LoadAddressableAssetsCoroutine(new ItemData { id = "GOIPot" });
         Check(missing.MoveNext(), "missing owner still returns an asset-loading coroutine");
         Drain((IEnumerator)missing.Current);
         return "PASS: startup asset load before ThunderScript.ScriptLoaded, pot texture/shader, missing-owner recovery";
+    }
+
+    private static void CheckPotAlignment()
+    {
+        var origin = new GameObject("VR locomotion origin");
+        origin.SetActive(false);
+        origin.transform.SetPositionAndRotation(new Vector3(4, 2, -3), Quaternion.Euler(0, 53, 0));
+        var body = new GameObject("Offset player body");
+        body.transform.SetParent(origin.transform, false);
+        body.transform.localPosition = new Vector3(-0.6f, 0, 0.3f);
+        var creature = body.AddComponent<Creature>();
+        creature.locomotion = origin.AddComponent<Locomotion>();
+        var worn = body.AddComponent<WornPot>();
+        worn.Initialize(creature);
+        var pot = body.GetComponentInChildren<MeshFilter>(true);
+        // Mesh vertices, not the model pivot or imported renderer bounds, define its visible centre.
+        Check(pot != null, "worn pot follows the body rather than the VR origin");
+        CheckPotGeometry(body.transform, pot);
+        body.transform.localPosition = new Vector3(0.45f, 0, -0.2f);
+        body.transform.localRotation = Quaternion.Euler(0, 127, 0);
+        body.transform.localScale = Vector3.one * 1.15f;
+        CheckPotGeometry(body.transform, pot);
+        UnityEngine.Object.DestroyImmediate(origin);
+    }
+
+    private static void CheckPotGeometry(Transform body, MeshFilter pot)
+    {
+        var vertices = pot.sharedMesh.vertices;
+        var matrix = body.worldToLocalMatrix * pot.transform.localToWorldMatrix;
+        var bounds = new Bounds(matrix.MultiplyPoint3x4(vertices[0]), Vector3.zero);
+        foreach (var vertex in vertices) bounds.Encapsulate(matrix.MultiplyPoint3x4(vertex));
+        Check(Mathf.Abs(bounds.center.x) < 0.001f && Mathf.Abs(bounds.center.z) < 0.001f,
+            "actual pot mesh centre matches body centre: " + bounds.center.ToString("F5"));
+        Check(Mathf.Abs(bounds.min.y) < 0.001f, "pot bottom matches body feet");
     }
 
     private static void Drain(IEnumerator routine)
