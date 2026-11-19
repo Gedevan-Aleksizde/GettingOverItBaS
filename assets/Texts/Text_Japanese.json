@@ -14,7 +14,7 @@
       "$type": "ThunderRoad.TextData+Item, ThunderRoad",
       "id": "GOILongHammer",
       "name": "登攀用ハンマー",
-      "description": "登山用の両手持ちハンマーです。"
+      "description": "登山用の両手用ハンマーです。"
     }
   ],
   "textGroups": [
@@ -25,7 +25,7 @@
         {
           "$type": "ThunderRoad.TextData+TextID, ThunderRoad",
           "id": "Advanced",
-          "text": "詳細設定"
+          "text": "高度な設定"
         }
       ]
     },
